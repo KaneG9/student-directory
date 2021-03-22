@@ -29,6 +29,7 @@ def input_students
     height = "N/A" if height.empty?
     students << { name: name, cohort: cohort, country: country, height: height }
     students.count == 1 ? (puts "Now we have #{students.count} student") : (puts "Now we have #{students.count} students")
+    puts "Enter next student's name"
     name = gets.chomp
   end
   students
@@ -71,9 +72,12 @@ end
 #can replace .chomp with [0..-2]
 
 students = input_students
-print_header
-print_list(students)
-group_by_cohort(students)
-print_footer(students)
-
+unless students.empty?
+  print_header
+  print_list(students)
+  group_by_cohort(students)
+  print_footer(students)
+else
+  puts "No students entered"
+end
 
