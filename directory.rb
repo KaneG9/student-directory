@@ -67,11 +67,13 @@ def group_by_cohort(students)
     members.each { |person| puts "#{person[:name]} (#{person[:cohort]} cohort)".center(100)}
   end
 end
-    
-  
+
+#can replace .chomp with [0..-2]
+
 students = input_students
 print_header
 print_list(students)
 group_by_cohort(students)
 print_footer(students)
+
 
