@@ -8,7 +8,7 @@ def print_list(names)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students".center(100)
+  names.count == 1 ? (puts "Overall, we have #{names.count} great student".center(100)) : (puts "Overall, we have #{names.count} great students".center(100))
   puts "-------------".center(100)
 end
 
@@ -28,7 +28,7 @@ def input_students
     height = gets.chomp
     height = "N/A" if height.empty?
     students << { name: name, cohort: cohort, country: country, height: height }
-    puts "Now we have #{students.count} students"
+    students.count == 1 ? (puts "Now we have #{students.count} student") : (puts "Now we have #{students.count} students")
     name = gets.chomp
   end
   students
