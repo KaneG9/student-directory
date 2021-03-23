@@ -17,15 +17,14 @@ end
 
 def input_students
   puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
+  puts "To finish, just hit return twice."
   name = STDIN.gets.chomp
   while !name.empty? do 
-    puts "Enter cohort start month"
+    puts "Enter cohort start month:"
     cohort = STDIN.gets.chomp
-    cohort = "N/A" if cohort.empty?
     add_student(name, cohort)
-    @students.count == 1 ? (puts "Now we have #{@students.count} student") : (puts "Now we have #{@students.count} students")
-    puts "Enter next student's name"
+    puts "#{name} was added. Now we have #{@students.count} student#{@students.count == 1 ? "" : "s"}."
+    puts "Enter next student's name:"
     name = STDIN.gets.chomp
   end
 end
@@ -33,8 +32,8 @@ end
 def print_menu
   puts "1. Input students"
   puts "2. Show students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load students from students.csv"
+  puts "3. Save the students to (deafult = students.csv)"
+  puts "4. Load students from (default = students.csv)"
   puts "9. Exit"
 end
 
@@ -69,22 +68,35 @@ def interactive_menu
 end
 
 def save_students
-  file = File.open("students.csv", "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  filename = choose_file("save to")
+  File.open(filename, "w") do |file|
+    count = 0
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+      count += 1
+    end
+    puts "#{count} student#{count == 1 ? " was" : "s were"} saved to #{filename}"
   end
-  file.close
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
+  filename = choose_file("load from")
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     add_student(name, cohort)
+    end
+  puts "Data successfully loaded from #{filename}"
   end
-  file.close
+end
+
+def choose_file(from)
+  puts "Enter file to #{from} (press enter for default):"
+  filename = STDIN.gets.chomp
+  filename = "students.csv" if filename.empty?
+  filename
 end
 
 def startup_load_students
@@ -92,7 +104,7 @@ def startup_load_students
   filename = "students.csv" if filename.nil? #autoload students.csv if no file is given
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} students from #{filename}"
+    puts "Loaded #{@students.count} student#{@students.count == 1 ? "" : "s"} from #{filename}"
   else
     puts "Sorry, #{filename} does not exist."
     exit
