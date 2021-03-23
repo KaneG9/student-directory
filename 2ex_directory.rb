@@ -1,4 +1,5 @@
 @students = []
+require "csv"
 
 def print_header
   puts ("The students of Villains Academy".center(100))
@@ -30,11 +31,14 @@ def input_students
 end
 
 def print_menu
+  puts "-------"
+  puts "What would you like to do?"
   puts "1. Input students"
   puts "2. Show students"
   puts "3. Save the students to (deafult = students.csv)"
   puts "4. Load students from (default = students.csv)"
   puts "9. Exit"
+  puts "-------"
 end
 
 def show_students
@@ -69,12 +73,10 @@ end
 
 def save_students
   filename = choose_file("save to")
-  File.open(filename, "w") do |file|
+  CSV.open(filename, "w") do |file|
     count = 0
     @students.each do |student|
-      student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      file << [student[:name], student[:cohort]]
       count += 1
     end
     puts "#{count} student#{count == 1 ? " was" : "s were"} saved to #{filename}"
@@ -83,13 +85,11 @@ end
 
 def load_students(filename = "students.csv")
   filename = choose_file("load from")
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
+  CSV.foreach(filename) do |row|
+    name, cohort = row
     add_student(name, cohort)
-    end
-  puts "Data successfully loaded from #{filename}"
   end
+  puts "Data successfully loaded from #{filename}"
 end
 
 def choose_file(from)
@@ -117,5 +117,3 @@ end
 
 startup_load_students
 interactive_menu
-
-
