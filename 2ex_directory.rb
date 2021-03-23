@@ -28,7 +28,6 @@ def input_students
     puts "Enter next student's name"
     name = STDIN.gets.chomp
   end
-  @students
 end
 
 def print_menu
@@ -58,7 +57,7 @@ def process(selection)
     when "9"
       exit
     else 
-      puts "Please enter a number and try again"
+      puts "Please enter a number from the list and try again"
   end
 end
 
@@ -88,9 +87,9 @@ def load_students(filename = "students.csv")
   file.close
 end
 
-def try_load_students
+def startup_load_students
   filename = ARGV.first #first commandline arg
-  filename = "students.csv" if filename.nil?
+  filename = "students.csv" if filename.nil? #autoload students.csv if no file is given
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} students from #{filename}"
@@ -104,7 +103,7 @@ def add_student(name, cohort)
   @students << { name: name, cohort: cohort.to_sym }
 end
 
-try_load_students
+startup_load_students
 interactive_menu
 
 
