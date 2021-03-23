@@ -69,15 +69,29 @@ def group_by_cohort(students)
   end
 end
 
+def interactive_menu
+  students = []
+  loop do
+    puts "1. Input students"
+    puts "2. Show students"
+    puts "9. Exit"
+    selection = gets.chomp
+    case selection
+      when "1"
+        students = input_students
+      when "2"
+        print_header
+        print_list(students)
+        print_footer(students)
+      when "9"
+        exit
+      else 
+        puts "Please enter a number and try again"
+    end
+  end
+end
+
 #can replace .chomp with [0..-2]
 
-students = input_students
-unless students.empty?
-  print_header
-  print_list(students)
-  group_by_cohort(students)
-  print_footer(students)
-else
-  puts "No students entered"
-end
+interactive_menu
 
